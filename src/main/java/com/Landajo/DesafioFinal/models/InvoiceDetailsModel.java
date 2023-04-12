@@ -1,5 +1,6 @@
 package com.Landajo.DesafioFinal.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,14 +19,15 @@ public class InvoiceDetailsModel {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "invoice_id")
+    @JsonIgnore
     private InvoiceModel invoice_id;
     @Min(0)
-    private int amount;
+    private int amount;  //cantidad del producto comprado
     @NotNull
     @ManyToOne
     @JoinColumn(name = "product_id")
     private ProductModel product_id;
     @Min(0)
-    private double price;
+    private double price;  //precio del producto comprado
 
 }
