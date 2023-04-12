@@ -1,7 +1,9 @@
 package com.Landajo.DesafioFinal.services;
 
 import com.Landajo.DesafioFinal.exceptions.IdNotValidException;
-import com.Landajo.DesafioFinal.models.ClientModel;
+import com.Landajo.DesafioFinal.exceptions.InvoiceExceptions.InvoiceEmptyException;
+import com.Landajo.DesafioFinal.exceptions.InvoiceExceptions.InvoiceNotFoundException;
+import com.Landajo.DesafioFinal.models.InvoiceDetailsModel;
 import com.Landajo.DesafioFinal.models.InvoiceModel;
 import com.Landajo.DesafioFinal.repositories.InvoiceRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -17,39 +19,39 @@ public class InvoiceService {
     @Autowired
     InvoiceRepository invoiceRepository;
 
-    public InvoiceModel createInvoice(InvoiceModel newInvoice){
-        return this.invoiceRepository.save(newInvoice);
-    }
-
-    public InvoiceModel updateInvoice(InvoiceModel invoice, Long id) throws IdNotValidException {
-        log.info("Id ingresado: " + id);
-        if (id <= 0){
-            log.info("El id ingresado no es valido.");
-            throw new IdNotValidException("El id ingresado no es valido");
+    public InvoiceModel createInvoice(InvoiceModel newInvoice) throws InvoiceEmptyException {
+        if (newInvoice == null){
+            log.info("No se puede crear un comprobante vacio");
+            throw new InvoiceEmptyException("No se puede crear un comprobante vacio");
+        } else {
+            int total = calcularTotal(newInvoice.getItems());
+            newInvoice.setTotal(total);
+            return this.invoiceRepository.save(newInvoice);
         }
-
-        Optional<InvoiceModel> invoiceOp = this.invoiceRepository.findById(id);
-        InvoiceModel invoiceDb = invoiceOp.get();
-
-        invoiceDb.setClient_id(invoice.getClient_id());
-        invoiceDb.setCreated_at(invoice.getCreated_at());
-        invoiceDb.setTotal(invoice.getTotal());
-
-        log.info("El invoice actualizado: " + invoiceDb);
-        return this.invoiceRepository.save(invoiceDb);
-
     }
 
-    public InvoiceModel findInvoiceById(Long id) throws IdNotValidException {
+    public InvoiceModel findInvoiceById(Long id) throws IdNotValidException, InvoiceNotFoundException {
         if (id <= 0){
             log.info("El id ingresado no es valido");
             throw new IdNotValidException("El id ingresado no es valido");
         }
-        Optional<InvoiceModel> invoice = this.invoiceRepository.findById(id);
-        return invoice.get();
+        Optional<InvoiceModel> invoiceOp = this.invoiceRepository.findById(id);
+        if (invoiceOp.isEmpty()){
+            log.info("Ningun invoice de id:" + id + " fue encontrado");
+            throw new InvoiceNotFoundException("El comprobante que esta intentando acceder no fue encontrado");
+        } else {
+            return invoiceOp.get();
+        }
     }
-
     public List<InvoiceModel> findAllInvoices(){
         return this.invoiceRepository.findAll();
+    }
+
+    public int calcularTotal(List<InvoiceDetailsModel> listaInvoiceDetails){
+        int total = 0;
+        for (InvoiceDetailsModel invoice: listaInvoiceDetails) {
+            total += invoice.getAmount() * invoice.getPrice();
+        }
+        return total;
     }
 }

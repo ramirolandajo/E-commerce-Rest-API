@@ -2,6 +2,8 @@ package com.Landajo.DesafioFinal.exceptions;
 
 import com.Landajo.DesafioFinal.exceptions.ClientExceptions.ClientAlreadyExistsException;
 import com.Landajo.DesafioFinal.exceptions.ClientExceptions.ClientNotFoundException;
+import com.Landajo.DesafioFinal.exceptions.InvoiceExceptions.InvoiceEmptyException;
+import com.Landajo.DesafioFinal.exceptions.InvoiceExceptions.InvoiceNotFoundException;
 import com.Landajo.DesafioFinal.exceptions.ProductExceptions.ProductAlreadyExistsException;
 import com.Landajo.DesafioFinal.exceptions.ProductExceptions.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -39,5 +41,15 @@ public class GlobalHandlerException {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    //Invoice Exceptions
+    @ExceptionHandler(InvoiceEmptyException.class)
+    public ResponseEntity<?> invoiceEmptyException(Exception e){
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InvoiceNotFoundException.class)
+    public ResponseEntity<?> invoiceNotFoundException(Exception e){
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
 }
 

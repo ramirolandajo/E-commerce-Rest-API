@@ -1,6 +1,8 @@
 package com.Landajo.DesafioFinal.controllers;
 
 import com.Landajo.DesafioFinal.exceptions.IdNotValidException;
+import com.Landajo.DesafioFinal.exceptions.InvoiceExceptions.InvoiceEmptyException;
+import com.Landajo.DesafioFinal.exceptions.InvoiceExceptions.InvoiceNotFoundException;
 import com.Landajo.DesafioFinal.models.InvoiceModel;
 import com.Landajo.DesafioFinal.services.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +20,11 @@ public class InvoiceController {
     InvoiceService invoiceService;
 
     @PostMapping(path = "/")
-    public ResponseEntity<InvoiceModel> createInvoice(@RequestBody InvoiceModel newInvoice) {
+    public ResponseEntity<InvoiceModel> createInvoice(@RequestBody InvoiceModel newInvoice) throws InvoiceEmptyException {
         return new ResponseEntity<>(this.invoiceService.createInvoice(newInvoice), HttpStatus.OK);
     }
-    @PutMapping(path = "/{id}")
-    public ResponseEntity<InvoiceModel> updateInvoice(@RequestBody InvoiceModel invoice, @PathVariable Long id) throws IdNotValidException {
-        return new ResponseEntity<>(this.invoiceService.updateInvoice(invoice, id), HttpStatus.OK);
-    }
     @GetMapping(path = "/{id}")
-    public ResponseEntity<InvoiceModel> findInvoiceById(@PathVariable Long id) throws IdNotValidException {
+    public ResponseEntity<InvoiceModel> findInvoiceById(@PathVariable Long id) throws IdNotValidException, InvoiceNotFoundException {
         return new ResponseEntity<>(this.invoiceService.findInvoiceById(id), HttpStatus.OK);
     }
     @GetMapping(path = "/")
