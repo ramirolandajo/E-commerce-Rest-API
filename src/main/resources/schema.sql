@@ -33,7 +33,7 @@ CREATE TABLE invoices_details(
 
 insert into clients(name, lastname, docnumber) values ('Ramiro', 'Landajo', '11111111'), ('Dibu','Martinez', '22222222');
 
-insert into products(description, code, stock, price) values ('control remoto', '123', 50, 100), ('play 5', '567', 2, 2000);
+insert into products(description, code, stock, price) values ('Control Remoto', '123', 50, 100), ('PlayStation 5', '567', 2, 2000);
 
 insert into invoices(client_id, created_at, total) values (2, '2023-04-08', 2500), (1, '2023-04-09', 150);
 

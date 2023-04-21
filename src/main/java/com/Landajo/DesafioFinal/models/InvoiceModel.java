@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -21,12 +21,12 @@ public class InvoiceModel {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "client_id")
-    private ClientModel client_id;
+    private ClientModel client;
     @NotNull
-    private LocalDate created_at; // YYYY-MM-DD
+    @JsonIgnore
+    private LocalDateTime created_at; // YYYY-MM-DD ...
     @NotNull
     @OneToMany
-    @JsonIgnore
     private List<InvoiceDetailsModel> items;
     @Min(0)
     @NotNull

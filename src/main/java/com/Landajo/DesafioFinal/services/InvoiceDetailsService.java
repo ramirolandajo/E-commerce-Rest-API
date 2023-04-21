@@ -16,11 +16,6 @@ public class InvoiceDetailsService {
     @Autowired
     InvoiceDetailsRepository invoiceDetailsRepository;
 
-    public InvoiceDetailsModel createInvoiceDetails(InvoiceDetailsModel newInvoiceDetails) {
-//        newInvoiceDetails.setInvoice_id(); //hay que agregar el id manualmente
-        return this.invoiceDetailsRepository.save(newInvoiceDetails);
-    }
-
     public InvoiceDetailsModel findInvoiceDetailsById(Long id) throws IdNotValidException {
         if (id <= 0){
             log.info("El id ingresado no es valido");
