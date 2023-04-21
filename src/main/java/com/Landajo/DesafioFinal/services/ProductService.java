@@ -3,6 +3,8 @@ package com.Landajo.DesafioFinal.services;
 import com.Landajo.DesafioFinal.exceptions.ProductExceptions.ProductAlreadyExistsException;
 import com.Landajo.DesafioFinal.exceptions.ProductExceptions.ProductNotFoundException;
 import com.Landajo.DesafioFinal.exceptions.IdNotValidException;
+import com.Landajo.DesafioFinal.models.InvoiceDetailsModel;
+import com.Landajo.DesafioFinal.models.InvoiceModel;
 import com.Landajo.DesafioFinal.models.ProductModel;
 import com.Landajo.DesafioFinal.repositories.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -70,5 +72,13 @@ public class ProductService {
 
     public List<ProductModel> findAllProducts(){
         return this.productRepository.findAll();
+    }
+
+    public void updateStock(InvoiceModel invoiceModel) throws ProductNotFoundException, IdNotValidException {
+        for (InvoiceDetailsModel item: invoiceModel.getItems()){
+            ProductModel product = item.getProduct();
+            product.setStock(product.getStock() - item.getAmount());
+            updateProduct(product, product.getId());
+        }
     }
 }

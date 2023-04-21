@@ -1,7 +1,6 @@
 package com.Landajo.DesafioFinal.controllers;
 
 import com.Landajo.DesafioFinal.exceptions.IdNotValidException;
-import com.Landajo.DesafioFinal.exceptions.InvoiceExceptions.InvoiceEmptyException;
 import com.Landajo.DesafioFinal.exceptions.InvoiceExceptions.InvoiceNotFoundException;
 import com.Landajo.DesafioFinal.models.InvoiceModel;
 import com.Landajo.DesafioFinal.services.InvoiceService;
@@ -20,7 +19,7 @@ public class InvoiceController {
     InvoiceService invoiceService;
 
     @PostMapping(path = "/")
-    public ResponseEntity<InvoiceModel> createInvoice(@RequestBody InvoiceModel newInvoice) throws InvoiceEmptyException {
+    public ResponseEntity<InvoiceModel> createInvoice(@RequestBody InvoiceModel newInvoice) throws Exception {
         return new ResponseEntity<>(this.invoiceService.createInvoice(newInvoice), HttpStatus.OK);
     }
     @GetMapping(path = "/{id}")

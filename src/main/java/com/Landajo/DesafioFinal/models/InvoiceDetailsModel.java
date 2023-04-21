@@ -20,14 +20,12 @@ public class InvoiceDetailsModel {
     @ManyToOne
     @JoinColumn(name = "invoice_id")
     @JsonIgnore
-    private InvoiceModel invoice_id;
+    private InvoiceModel invoice;
     @Min(0)
     private int amount;  //cantidad del producto comprado
     @NotNull
     @ManyToOne
     @JoinColumn(name = "product_id")
-    private ProductModel product_id;
-    @Min(0)
-    private double price;  //precio del producto comprado
+    private ProductModel product;
 
 }
