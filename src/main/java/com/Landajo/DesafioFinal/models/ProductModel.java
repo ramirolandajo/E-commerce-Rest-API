@@ -2,6 +2,8 @@ package com.Landajo.DesafioFinal.models;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.bytebuddy.utility.nullability.AlwaysNull;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -20,7 +22,6 @@ public class ProductModel {
     private String code;
     @Min(0)
     private int stock;
-    @Min(0)
     private double price;
 
 }

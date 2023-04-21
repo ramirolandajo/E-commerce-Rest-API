@@ -3,6 +3,7 @@ package com.Landajo.DesafioFinal.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -15,12 +16,13 @@ import javax.validation.constraints.NotNull;
 public class InvoiceDetailsModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long invoice_detail_id;
+    @Column(name = "invoice_detail_id")
+    private Long id;
     @NotNull
     @ManyToOne
     @JoinColumn(name = "invoice_id")
-    @JsonIgnore
-    private InvoiceModel invoice;
+    @ToString.Exclude
+    private InvoiceModel invoice;   //comprobante al que pertenece
     @Min(0)
     private int amount;  //cantidad del producto comprado
     @NotNull

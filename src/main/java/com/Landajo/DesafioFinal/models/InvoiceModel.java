@@ -26,7 +26,7 @@ public class InvoiceModel {
     @JsonIgnore
     private LocalDateTime created_at; // YYYY-MM-DD ...
     @NotNull
-    @OneToMany
+    @OneToMany(mappedBy = "invoice")
     private List<InvoiceDetailsModel> items;
     @Min(0)
     @NotNull

@@ -1,10 +1,8 @@
 package com.Landajo.DesafioFinal.services;
 
-import com.Landajo.DesafioFinal.exceptions.ClientExceptions.ClientNotFoundException;
 import com.Landajo.DesafioFinal.exceptions.IdNotValidException;
 import com.Landajo.DesafioFinal.exceptions.InvoiceExceptions.InvoiceEmptyException;
 import com.Landajo.DesafioFinal.exceptions.InvoiceExceptions.InvoiceNotFoundException;
-import com.Landajo.DesafioFinal.models.ClientModel;
 import com.Landajo.DesafioFinal.models.InvoiceDetailsModel;
 import com.Landajo.DesafioFinal.models.InvoiceModel;
 import com.Landajo.DesafioFinal.repositories.InvoiceDetailsRepository;
@@ -59,6 +57,7 @@ public class InvoiceService {
         //creamos una lista para guardar los detalles de cada producto del comprobante en el invoiceDetailsRepository
         List<InvoiceDetailsModel> listDetails = new ArrayList<>();
         for (InvoiceDetailsModel item : newInvoice.getItems()){
+            log.info("Prueba: " + item.toString());
             item.setInvoice(newInvoice); // se le asigna el invoice para que el detalle sepa a que factura pertenece
             listDetails.add(this.invoiceDetailsRepository.save(item));
         }
