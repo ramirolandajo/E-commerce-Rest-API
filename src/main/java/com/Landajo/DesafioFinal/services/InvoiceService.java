@@ -1,8 +1,10 @@
 package com.Landajo.DesafioFinal.services;
 
+import com.Landajo.DesafioFinal.exceptions.ClientExceptions.ClientNotFoundException;
 import com.Landajo.DesafioFinal.exceptions.IdNotValidException;
 import com.Landajo.DesafioFinal.exceptions.InvoiceExceptions.InvoiceEmptyException;
 import com.Landajo.DesafioFinal.exceptions.InvoiceExceptions.InvoiceNotFoundException;
+import com.Landajo.DesafioFinal.models.ClientModel;
 import com.Landajo.DesafioFinal.models.InvoiceDetailsModel;
 import com.Landajo.DesafioFinal.models.InvoiceModel;
 import com.Landajo.DesafioFinal.repositories.InvoiceDetailsRepository;
@@ -33,15 +35,18 @@ public class InvoiceService {
             log.info("No se puede crear un comprobante vacio");
             throw new InvoiceEmptyException("No se puede crear un comprobante vacio");
         }
-        this.clientService.findClientById(newInvoice.getClient().getId());  //chequear que el cliente existe en la BD
 
+        this.clientService.findClientById(newInvoice.getClient().getId()); //chequear que el cliente existe en la BD
+
+        // chequeamos que haya stock de cada producto a comprar
         for (InvoiceDetailsModel item : newInvoice.getItems()){
             if (item.getProduct().getStock() - item.getAmount() < 0){
                 log.info("Stock insuficiente del producto: " + item.getProduct());
                 throw new Exception("Stock insuficiente del producto: " + item.getProduct());
             }
         }
-        double total = calcularTotal(newInvoice.getItems()); //calculamos el total a abonar
+
+        double total = calculateTotal(newInvoice.getItems()); //calculamos el total a abonar
 
         // seteamos los valores de fecha y total a abonar
         newInvoice.setCreated_at(LocalDateTime.now());
@@ -83,7 +88,7 @@ public class InvoiceService {
         return this.invoiceRepository.findAll();
     }
 
-    public double calcularTotal(List<InvoiceDetailsModel> listaInvoiceDetails){
+    public double calculateTotal(List<InvoiceDetailsModel> listaInvoiceDetails){
         double total = 0;
         for (InvoiceDetailsModel item: listaInvoiceDetails) {
             total += item.getAmount() * item.getProduct().getPrice();
