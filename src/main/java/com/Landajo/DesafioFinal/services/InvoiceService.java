@@ -61,14 +61,17 @@ public class InvoiceService {
 
         //creamos una lista para guardar los detalles de cada producto del comprobante en el invoiceDetailsRepository
         List<InvoiceDetailsModel> listDetails = new ArrayList<>();
+        int cantProductos = 0;
         for (InvoiceDetailsModel item : newInvoice.getItems()){
             item.setInvoice(newInvoice);            // se le asigna el invoice para que el detalle sepa a que factura pertenece
             item.setProduct(item.getProduct());
             listDetails.add(item);
             this.invoiceDetailsRepository.save(item);
+            cantProductos++;
         }
         newInvoice.setItems(listDetails);
         log.info("INVOICE COMPLETE : " + newInvoice);
+        log.info("Cantidad de productos vendidos: " + cantProductos);
         //actualizamos el stock
         this.productService.updateStock(newInvoice);
 
