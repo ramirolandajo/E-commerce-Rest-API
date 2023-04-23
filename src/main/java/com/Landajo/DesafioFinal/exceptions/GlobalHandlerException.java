@@ -6,6 +6,7 @@ import com.Landajo.DesafioFinal.exceptions.InvoiceExceptions.InvoiceEmptyExcepti
 import com.Landajo.DesafioFinal.exceptions.InvoiceExceptions.InvoiceNotFoundException;
 import com.Landajo.DesafioFinal.exceptions.ProductExceptions.ProductAlreadyExistsException;
 import com.Landajo.DesafioFinal.exceptions.ProductExceptions.ProductNotFoundException;
+import com.Landajo.DesafioFinal.exceptions.ProductExceptions.ProductOutOfStockException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -39,6 +40,11 @@ public class GlobalHandlerException {
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<?> productNotFoundException(Exception e){
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ProductOutOfStockException.class)
+    public ResponseEntity<?> productOutOfStockException(Exception e){
+        return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
     }
 
     //Invoice Exceptions

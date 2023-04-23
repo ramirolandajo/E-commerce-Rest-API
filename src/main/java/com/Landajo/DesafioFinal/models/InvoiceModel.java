@@ -2,6 +2,7 @@ package com.Landajo.DesafioFinal.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 public class InvoiceModel {
     @Id
+    @Column(name = "invoice_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
@@ -27,7 +29,7 @@ public class InvoiceModel {
     private LocalDateTime created_at; // YYYY-MM-DD ...
     @NotNull
     @OneToMany(mappedBy = "invoice")
-    private List<InvoiceDetailsModel> items;
+    private List<InvoiceDetailsModel> items;    //lista de los detalles del comprobante (cantidad de producto comprada, y cuales compro)
     @Min(0)
     @NotNull
     @JsonIgnore

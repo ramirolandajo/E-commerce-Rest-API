@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class ClientModel {
     @Id
+    @Column(name = "client_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull

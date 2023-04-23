@@ -10,7 +10,6 @@ import com.Landajo.DesafioFinal.repositories.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 @Slf4j
@@ -32,7 +31,7 @@ public class ProductService {
     }
 
     public ProductModel updateProduct(ProductModel product, Long id) throws ProductNotFoundException, IdNotValidException {
-        log.info("Id ingresado: " + id);
+        log.info("Id de producto a actualizar ingresado: " + id);
         if (id <= 0){
             log.info("El id ingresado no es valido.");
             throw new IdNotValidException("El id ingresado no es valido");
@@ -75,7 +74,7 @@ public class ProductService {
     }
 
     public void updateStock(InvoiceModel invoiceModel) throws ProductNotFoundException, IdNotValidException {
-        for (InvoiceDetailsModel item: invoiceModel.getItems()){
+        for (InvoiceDetailsModel item: invoiceModel.getItems()){    //recorremos producto por producto para actualizar el stock de cada uno en el repository
             ProductModel product = item.getProduct();
             product.setStock(product.getStock() - item.getAmount());
             updateProduct(product, product.getId());

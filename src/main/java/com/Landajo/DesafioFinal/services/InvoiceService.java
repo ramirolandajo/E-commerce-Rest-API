@@ -3,6 +3,7 @@ package com.Landajo.DesafioFinal.services;
 import com.Landajo.DesafioFinal.exceptions.IdNotValidException;
 import com.Landajo.DesafioFinal.exceptions.InvoiceExceptions.InvoiceEmptyException;
 import com.Landajo.DesafioFinal.exceptions.InvoiceExceptions.InvoiceNotFoundException;
+import com.Landajo.DesafioFinal.exceptions.ProductExceptions.ProductOutOfStockException;
 import com.Landajo.DesafioFinal.models.InvoiceDetailsModel;
 import com.Landajo.DesafioFinal.models.InvoiceModel;
 import com.Landajo.DesafioFinal.repositories.InvoiceDetailsRepository;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +36,16 @@ public class InvoiceService {
             throw new InvoiceEmptyException("No se puede crear un comprobante vacio");
         }
 
-        this.clientService.findClientById(newInvoice.getClient().getId()); //chequear que el cliente existe en la BD
+        this.clientService.findClientById(newInvoice.getClient().getId()); //chequeamos que el cliente existe en la BD
+
 
         // chequeamos que haya stock de cada producto a comprar
         for (InvoiceDetailsModel item : newInvoice.getItems()){
-            if (item.getProduct().getStock() - item.getAmount() < 0){
-                log.info("Stock insuficiente del producto: " + item.getProduct());
-                throw new Exception("Stock insuficiente del producto: " + item.getProduct());
+            this.productService.findProductById(item.getProduct().getId());             //chequeamos que el producto exista en la BD
+
+            if (this.productService.findProductById(item.getProduct().getId()).getStock() - item.getAmount() < 0){ //usamos el product service para que nos de el producto con el stock actualizado, y no el stock del JSON
+                log.info("Stock insuficiente del producto: " + this.productService.findProductById(item.getProduct().getId()));
+                throw new ProductOutOfStockException("Stock insuficiente del producto: " + this.productService.findProductById(item.getProduct().getId()));
             }
         }
 
@@ -57,13 +62,13 @@ public class InvoiceService {
         //creamos una lista para guardar los detalles de cada producto del comprobante en el invoiceDetailsRepository
         List<InvoiceDetailsModel> listDetails = new ArrayList<>();
         for (InvoiceDetailsModel item : newInvoice.getItems()){
-            log.info("Prueba: " + item.toString());
-            item.setInvoice(newInvoice); // se le asigna el invoice para que el detalle sepa a que factura pertenece
-            listDetails.add(this.invoiceDetailsRepository.save(item));
+            item.setInvoice(newInvoice);            // se le asigna el invoice para que el detalle sepa a que factura pertenece
+            item.setProduct(item.getProduct());
+            listDetails.add(item);
+            this.invoiceDetailsRepository.save(item);
         }
         newInvoice.setItems(listDetails);
         log.info("INVOICE COMPLETE : " + newInvoice);
-
         //actualizamos el stock
         this.productService.updateStock(newInvoice);
 

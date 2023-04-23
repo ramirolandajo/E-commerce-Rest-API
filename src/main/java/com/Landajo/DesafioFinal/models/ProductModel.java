@@ -2,9 +2,6 @@ package com.Landajo.DesafioFinal.models;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.bytebuddy.utility.nullability.AlwaysNull;
-import org.springframework.lang.Nullable;
-
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -16,6 +13,7 @@ import javax.validation.constraints.NotNull;
 public class ProductModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_id")
     private Long id;
     private String description;
     @NotNull
