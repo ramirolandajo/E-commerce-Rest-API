@@ -31,3 +31,34 @@ public class InvoiceController {
         return new ResponseEntity<>(this.invoiceService.findAllInvoices(), HttpStatus.OK);
     }
 }
+//EJEMPLO DE REQUEST DE POSTMAN PARA TESTEAR EL POST
+//{
+//    "client": {
+//        "id": 1,
+//        "name": "Ramiro",
+//        "lastname": "Landajo",
+//        "docnumber": "11111111"
+//    },
+//    "items": [
+//        {
+//            "amount": 20,
+//            "product": {
+//            "id": 1,
+//            "description": "Control Remoto",
+//            "code": "123",
+//            "stock": 50,
+//            "price": 100.00
+//            }
+//        },
+//        {
+//            "amount": 2,
+//            "product": {
+//            "id": 2,
+//            "description": "PlayStation 5",
+//            "code": "567",
+//            "stock": 2,
+//            "price": 2000.00
+//            }
+//        }
+//    ]
+//}

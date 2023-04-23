@@ -2,9 +2,9 @@ package com.Landajo.DesafioFinal.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "invoices_details")
 @Data
+@EqualsAndHashCode(exclude = "invoice")
 @NoArgsConstructor
 public class InvoiceDetailsModel {
     @Id
@@ -19,7 +20,8 @@ public class InvoiceDetailsModel {
     @Column(name = "invoice_detail_id")
     private Long id;
     @NotNull
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "invoice_id")
     @ToString.Exclude
     private InvoiceModel invoice;   //comprobante al que pertenece

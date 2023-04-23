@@ -16,13 +16,19 @@ public class InvoiceDetailsService {
     @Autowired
     InvoiceDetailsRepository invoiceDetailsRepository;
 
-    public InvoiceDetailsModel findInvoiceDetailsById(Long id) throws IdNotValidException {
+    public InvoiceDetailsModel findInvoiceDetailsById(Long id) throws Exception {
         if (id <= 0){
             log.info("El id ingresado no es valido");
             throw new IdNotValidException("El id ingresado no es valido");
         }
         Optional<InvoiceDetailsModel> invoiceDetailsOp = this.invoiceDetailsRepository.findById(id);
-        return invoiceDetailsOp.get();
+
+        if (invoiceDetailsOp.isEmpty()){
+            log.info("Detalle de comprobante no se encuentra en la base de datos");
+            throw new Exception("Detalle de comprobante no se encuentra en la base de datos");
+        } else {
+            return invoiceDetailsOp.get();
+        }
     }
 
     public List<InvoiceDetailsModel> findAllInvoiceDetails(){
